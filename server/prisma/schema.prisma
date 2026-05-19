@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  MANAGER
+  CORPORATE_ADMIN
+  INSTRUCTOR
+  REVIEWER
+  SUPPORT_AGENT
+  STUDENT
+}
+
+enum CourseLevel {
+  FOUNDADTION
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  DROPPED
+}
+
+enum CertificateStatus {
+  ACTIVE
+  EXPIRED
+  REVOKED
+}
+
+model User {
+  id            String   @id @default(uuid())
+
+  firstName     String
+  lastName      String
+
+  email         String   @unique
+  password      String
+
+  role          UserRole @default(STUDENT)
+
+  isVerified    Boolean  @default(false)
+  isActive      Boolean  @default(true)
+
+  avatar        String?
+  bio           String?
+
+  courses       Course[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Organization {
+  id            String   @id @default(uuid())
+
+  name          String
+  slug          String   @unique
+
+  logo          String?
+  description   String?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model CourseCategory {
+  id            String   @id @default(uuid())
+
+  name          String   @unique
+  slug          String   @unique
+
+  description   String?
+
+  courses       Course[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Course {
+  id              String           @id @default(uuid())
+
+  title           String
+  slug            String           @unique
+  courseCode      String           @unique
+
+  description     String
+
+  thumbnail       String?
+
+  price           Float            @default(0)
+
+  level           CourseLevel
+
+  status          CourseStatus     @default(DRAFT)
+
+  categoryId      String
+  category        CourseCategory   @relation(fields: [categoryId], references: [id])
+
+  instructorId    String
+  instructor      User             @relation(fields: [instructorId], references: [id])
+
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
