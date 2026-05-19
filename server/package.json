@@ -20,11 +20,12 @@
   "author": "Ighreena Technologies",
   "type": "module",
   "main": "index.js",
- "scripts": {
+  "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js"
-  },  "dependencies": {
+  },
+  "dependencies": {
     "@prisma/client": "^7.8.0",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
