@@ -1,1 +1,0 @@
-# IGHREENA Academy
